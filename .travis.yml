@@ -13,6 +13,9 @@ env:
     - CHECKER_PY=./checker.py
     - TRAVIS_TAG=linux
     - PYTHON=python3
+    - CONNECTION_TIMEOUT=5000
+    - SOCKET_TIMEOUT=5000
+    - BIND_ADDRESS=0.0.0.0
 
 matrix:
   include:
@@ -66,6 +69,7 @@ script:
   - if [ $? != 0 ]; then cat RESULTS; fi
   - $PYTHON $CHECKER_PY check
   - $PYTHON $CHECKER_PY test
+  - java -Dnu.validator.servlet.connection-timeout=$CONNECTION_TIMEOUT -Dnu.validator.servlet.socket-timeout=$SOCKET_TIMEOUT -Dnu.validator.servlet.bind-address=$BIND_ADDRESS -classpath ./build/dist/vnu.jar nu.validator.servlet.Main 8888
 
 cache:
   directories:
